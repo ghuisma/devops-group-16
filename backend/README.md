@@ -5,6 +5,7 @@ The web framework we use is Chalice for Python. First setup for development:
 1. Install python 3
 2. Create and activate a virtual environment:
 ```
+$ cd backend
 $ python3 -m venv venv
 $ ./venv/bin/activate
 ```
