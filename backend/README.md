@@ -23,7 +23,6 @@ region=eu-central-1
 ```
 5. You can now deploy the Chalice app to the dev Lambda function + API Gateway, after which the API will be served by the URL that is printed to the console:
 ```
-$ cd backend
 $ chalice deploy
 ```
 6. To remove all resources again (Lambda + Gateway):
