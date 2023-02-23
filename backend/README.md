@@ -31,3 +31,13 @@ $ chalice deploy
 $ chalice delete
 ```
 7. Instructions for running locally + testing will be added later (or check Chalice docs).
+
+## Running the tests
+To run the tests locally, install `pytest`:
+```
+$ pip install pytest
+```
+and run the tests:
+```
+$ py.test tests/test_app.py
+```
