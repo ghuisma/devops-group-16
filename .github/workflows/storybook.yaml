@@ -16,8 +16,10 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
       - name: Build Storybook
+        working-directory: ./frontend
         run: yarn build-storybook --quiet
       - name: Serve Storybook and run tests
+        working-directory: ./frontend
         run: |
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
             "npx http-server storybook-static --port 6006 --silent" \
