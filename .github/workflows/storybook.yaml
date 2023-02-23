@@ -2,6 +2,9 @@
 
 name: 'Storybook Tests'
 on: push
+defaults:
+  run:
+    working-directory: ./frontend
 jobs:
   test:
     timeout-minutes: 60
@@ -12,16 +15,12 @@ jobs:
         with:
           node-version: '14.x'
       - name: Install dependencies
-        working-directory: ./frontend
         run: npm install
       - name: Install Playwright
-        working-directory: ./frontend
         run: npx playwright install --with-deps
       - name: Build Storybook
-        working-directory: ./frontend
         run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
-        working-directory: ./frontend
         run: |
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
             "npx http-server storybook-static --port 6006 --silent" \
