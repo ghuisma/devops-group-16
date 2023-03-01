@@ -1,0 +1,31 @@
+name: Upload a folder to S3
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Build static files
+      run: npm run build
+
+    - name: Copy a folder to s3
+      uses: prewk/s3-cp-action@v2
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        source: './frontend/out'
+        dest: 's3://some-bucket/something-remote'
+        flags: --recursive
