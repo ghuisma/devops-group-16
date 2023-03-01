@@ -1,7 +1,13 @@
 # .github/workflows/storybook-tests.yml
 
 name: 'Storybook Tests'
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 defaults:
   run:
     working-directory: ./frontend
