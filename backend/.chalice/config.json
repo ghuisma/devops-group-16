@@ -4,7 +4,21 @@
   "stages": {
     "dev": {
       "autogen_policy": false,
-      "api_gateway_stage": "api"
+      "api_gateway_stage": "dev",
+      "api_gateway_custom_domain": {
+        "domain_name": "test-api.onequestionsurvey.nl",
+        "certificate_arn": "arn:aws:acm:us-east-1:461124506129:certificate/2041d80a-8116-4a77-933e-4d4e85ce08ef",
+        "url_prefix": "v1"
+      }
+    },
+    "prod": {
+      "autogen_policy": false,
+      "api_gateway_stage": "prod",
+      "api_gateway_custom_domain": {
+        "domain_name": "api.onequestionsurvey.nl",
+        "certificate_arn": "arn:aws:acm:us-east-1:461124506129:certificate/2041d80a-8116-4a77-933e-4d4e85ce08ef",
+        "url_prefix": "v1"
+      }
     }
   }
 }
