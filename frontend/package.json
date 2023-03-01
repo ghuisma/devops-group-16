@@ -6,13 +6,10 @@
     "dev": "next dev",
     "build": "next build && next export",
     "lint": "next lint",
-<<<<<<< HEAD
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test-storybook": "test-storybook"
-=======
+    "test-storybook": "test-storybook",
     "test": "jest"
->>>>>>> main
   },
   "dependencies": {
     "@next/font": "13.1.6",
