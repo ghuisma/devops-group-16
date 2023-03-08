@@ -32,6 +32,6 @@ jobs:
         aws_access_key_id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
         aws_region: eu-west-1
-        source: './home/runner/work/devops-group-16/devops-group-16/frontend/out'
+        source: '/home/runner/work/devops-group-16/devops-group-16/frontend/out'
         dest: 's3://frontend-deployment-bucket/out'
         flags: --recursive
