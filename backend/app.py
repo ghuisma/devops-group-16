@@ -2,7 +2,7 @@ import base64
 
 import boto3
 from chalice.app import Chalice, AuthResponse
-from lib import auth, questions, answers, users
+from chalicelib import auth, questions, answers, users
 
 
 app = Chalice(app_name='one_question_survey')

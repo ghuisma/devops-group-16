@@ -25,9 +25,10 @@ def get_jwt_token(username, password, record, secret):
             'jti': unique_id,
             # NOTE: We can also add 'exp' if we want tokens to expire.
         }
-        return jwt.encode(payload, secret, algorithm='HS256').decode('utf-8')
+        return jwt.encode(payload, secret, algorithm='HS256')
     raise UnauthorizedError('Invalid password')
 
 
 def decode_jwt_token(token, secret):
+    token = token.replace("Bearer ", "")
     return jwt.decode(token, secret, algorithms=['HS256'])

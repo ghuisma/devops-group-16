@@ -9,6 +9,11 @@
         "domain_name": "test-api.onequestionsurvey.nl",
         "certificate_arn": "arn:aws:acm:us-east-1:461124506129:certificate/2041d80a-8116-4a77-933e-4d4e85ce08ef",
         "url_prefix": "v1"
+      },
+      "environment_variables": {
+        "QUESTIONS_TABLE_NAME": "questions-app-4d5b5147-8f51-4118-829a-c9314a9fbc72",
+        "ANSWERS_TABLE_NAME": "answers-app-f371fd1b-1bdb-4aae-ab04-41a82ac85bc4",
+        "USERS_TABLE_NAME": "users-app-bb0b7606-7022-400c-8d07-2f4922f10354"
       }
     },
     "prod": {

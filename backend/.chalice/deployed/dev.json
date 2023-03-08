@@ -12,6 +12,17 @@
       "lambda_arn": "arn:aws:lambda:eu-central-1:461124506129:function:one_question_survey-dev"
     },
     {
+      "name": "jwt_auth_role",
+      "resource_type": "iam_role",
+      "role_arn": "arn:aws:iam::461124506129:role/one_question_survey-dev-jwt_auth",
+      "role_name": "one_question_survey-dev-jwt_auth"
+    },
+    {
+      "name": "jwt_auth",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:eu-central-1:461124506129:function:one_question_survey-dev-jwt_auth"
+    },
+    {
       "name": "rest_api",
       "resource_type": "rest_api",
       "rest_api_id": "qbg92i2onc",
