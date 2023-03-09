@@ -25,13 +25,12 @@ jobs:
     
     - name: Build static files
       run: npm run build
-
-    - name: Copy a folder to s3
-      uses: prewk/s3-cp-action@v2
+        
+    - name: Copy folder to s3
+      uses: shallwefootball/s3-upload-action@master
       with:
-        aws_access_key_id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+        aws_key_id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
-        aws_region: 'eu-central-1'
-        source: '/home/runner/work/devops-group-16/devops-group-16/frontend/out'
-        dest: 's3://frontend-deployment-bucket/out'
-        flags: --recursive
+        aws_bucket: 's3://frontend-deployment-bucket/out'
+        source_dir: '/home/runner/work/devops-group-16/devops-group-16/frontend/out'
+        destination_dir: '/out'
