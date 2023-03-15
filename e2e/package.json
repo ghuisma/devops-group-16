@@ -1,0 +1,16 @@
+{
+  "name": "oqsa_e2e",
+  "version": "0.1.0",
+  "description": "End to end nighlies test for the One Question Survey App",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "testcafe chrome tests/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "testcafe": "^2.4.0"
+  }
+}
