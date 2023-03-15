@@ -1,10 +1,10 @@
-name: Upload a folder to S3
+name: Update the Lambda functions
 
 on:
   workflow_dispatch:
   push:
     branches:
-    - "*"
+    - "main"
 
 defaults:
   run:
