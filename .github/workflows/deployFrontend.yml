@@ -1,0 +1,37 @@
+name: Upload a folder to S3
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - "main"
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Build static files
+      run: npm run build
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync /home/runner/work/devops-group-16/devops-group-16/frontend/out s3://frontend-development-bucket --delete
