@@ -114,6 +114,7 @@ def get_question(uid):
 def update_question(uid):
     body = app.current_request.json_body
     username = get_authorized_username(app.current_request)
+    # TODO check if question exists
     get_questions_db().update_item(
         uid,
         question=body.get('question'),
@@ -121,26 +122,15 @@ def update_question(uid):
     )
 
 
-@app.route('/questions/{uid}', methods=['DELETE'], authorizer=jwt_auth)
-def delete_question(uid):
-    username = get_authorized_username(app.current_request)
-    return get_questions_db().delete_item(uid, username=username)
-
-
 # --------------------------------------------------------
-# Answer endpoints
+# Answer endpoint
 # --------------------------------------------------------
 
 @app.route('/answers/{question_id}', methods=['POST'])
 def create_answer(question_id):
     body = app.current_request.json_body
-    return get_answers_db().add_item(
+    # TODO check if question exists
+    get_answers_db().add_item(
         question_id=question_id,
         answer=body['answer'],
     )
-
-
-@app.route('/answers', methods=['GET'], authorizer=jwt_auth)
-def get_answers():
-    username = get_authorized_username(app.current_request)
-    return get_answers_db().list_items(username=username)

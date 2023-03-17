@@ -23,7 +23,6 @@ def get_jwt_token(username, password, record, secret):
             'iat': now,
             'nbf': now,
             'jti': unique_id,
-            # NOTE: We can also add 'exp' if we want tokens to expire.
         }
         return jwt.encode(payload, secret, algorithm='HS256')
     raise UnauthorizedError('Invalid password')
