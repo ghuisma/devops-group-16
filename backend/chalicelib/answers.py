@@ -10,7 +10,7 @@ DEFAULT_USERNAME = 'default'
 
 
 class AnswerDB(object):
-    def list_items(self, username=DEFAULT_USERNAME):
+    def list_items(self, question_id, username=DEFAULT_USERNAME):
         pass
 
     def add_item(self, question_id, answer):
@@ -30,34 +30,19 @@ class DynamoAnswerDB(AnswerDB):
     def __init__(self):
         self._table = boto3.resource('dynamodb').Table(os.environ['ANSWERS_TABLE_NAME'])
 
-    def list_items(self, username=DEFAULT_USERNAME):
-        # TODO query by questions created by user
-        return {}
-
     def add_item(self, question_id, answer):
         uid = str(uuid4())
         self._table.put_item(
             Item={
                 'uid': uid,
-                'question_id': question_id,
+                'questionId': question_id,
                 'answer': answer,
             }
         )
         return uid
 
-    def get_item(self, uid, username=DEFAULT_USERNAME):
-        # TODO access control
-        response = self._table.get_item(
-            Key={
-                'uid': uid,
-            },
+    def list_items(self, question_id, username=DEFAULT_USERNAME):
+        response = self._table.query(
+            KeyConditionExpression=Key('questionId').eq(question_id)
         )
-        return response['Item']
-
-    def delete_item(self, uid, username=DEFAULT_USERNAME):
-        # TODO access control
-        self._table.delete_item(
-            Key={
-                'uid': uid,
-            }
-        )
+        return response['Items']

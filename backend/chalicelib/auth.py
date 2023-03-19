@@ -25,7 +25,7 @@ def get_jwt_token(username, password, record, secret):
             'jti': unique_id,
         }
         return jwt.encode(payload, secret, algorithm='HS256')
-    raise UnauthorizedError('Invalid password')
+    raise UnauthorizedError('Invalid username or password')
 
 
 def decode_jwt_token(token, secret):

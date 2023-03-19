@@ -2,6 +2,7 @@ import os
 import boto3
 
 from uuid import uuid4
+from chalice.app import NotFoundError
 
 from boto3.dynamodb.conditions import Key
 
@@ -14,6 +15,9 @@ class QuestionDB(object):
         pass
 
     def add_item(self, question, username=DEFAULT_USERNAME):
+        pass
+
+    def item_exists(self, uid):
         pass
 
     def get_item(self, uid, username=DEFAULT_USERNAME):
@@ -42,11 +46,18 @@ class DynamoQuestionDB(QuestionDB):
             Item={
                 'uid': uid,
                 'username': username,
-                'question': question,
-                'url': f"https://app.onequestionsurvey.nl/answer-question/{uid}"
+                'question': question
             }
         )
-        return uid
+        return {
+            'uid': uid,
+            'question': question,
+        }
+    
+    def item_exists(self, uid):
+        fe = Key('uid').eq(uid)
+        response = self._table.scan(FilterExpression=fe)
+        return len(response.get('Items', [])) > 0
 
     def get_item(self, uid, username=DEFAULT_USERNAME):
         response = self._table.get_item(
@@ -55,7 +66,10 @@ class DynamoQuestionDB(QuestionDB):
                 'uid': uid,
             },
         )
-        return response['Item']
+        try:
+            return response['Item']
+        except KeyError:
+            raise NotFoundError()
 
     def delete_item(self, uid, username=DEFAULT_USERNAME):
         self._table.delete_item(
@@ -95,9 +109,11 @@ class InMemoryQuestionDB(QuestionDB):
             'uid': uid,
             'username': username,
             'question': question,
-            'url': f"https://app.onequestionsurvey.nl/answer-question/{uid}"
         }
-        return uid
+        return {
+            'uid': uid,
+            'question': question,
+        }
 
     def get_item(self, uid, username=DEFAULT_USERNAME):
         return self._state[username][uid]
@@ -107,5 +123,6 @@ class InMemoryQuestionDB(QuestionDB):
 
     def update_item(self, uid, question=None, username=DEFAULT_USERNAME):
         item = self._state[username][uid]
-        if question is not None:
-            item['question'] = question
+        if item is None:
+            raise NotFoundError()
+        item['question'] = question

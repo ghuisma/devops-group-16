@@ -1,7 +1,7 @@
 import base64
 
 import boto3
-from chalice.app import Chalice, AuthResponse
+from chalice.app import Chalice, AuthResponse, BadRequestError, NotFoundError
 from chalicelib import auth, questions, answers, users
 
 
@@ -65,6 +65,8 @@ def jwt_auth(auth_request):
 def login():
     body = app.current_request.json_body
     record = get_users_db().get_user(body.get('username'))
+    if record is None:
+        raise BadRequestError('Invalid username or password')
     jwt_token = auth.get_jwt_token(body['username'], body['password'], record, get_auth_key())
     return {'token': jwt_token}
 
@@ -72,8 +74,13 @@ def login():
 @app.route('/auth/register', methods=['POST'])
 def register():
     body = app.current_request.json_body
-    # TODO check if password matches repeated password
-    # TODO check if username is already taken
+    pwd1 = body.get('password')
+    pwd2 = body.get('repeat_password')
+    if pwd1 != pwd2:
+        raise BadRequestError('Password and password repeat do not match')
+    user = get_users_db().get_user(body.get('username'))
+    if user is not None:
+        raise BadRequestError('User with this username already exists')
     get_users_db().create_user(
         body.get('username'),
         body.get('password'),
@@ -97,6 +104,8 @@ def list_questions():
 def create_question():
     body = app.current_request.json_body
     username = get_authorized_username(app.current_request)
+    if "question" not in body:
+        raise BadRequestError("Missing question body")
     return get_questions_db().add_item(
         username=username,
         question=body['question'],
@@ -106,15 +115,18 @@ def create_question():
 @app.route('/questions/{uid}', methods=['GET'], authorizer=jwt_auth)
 def get_question(uid):
     username = get_authorized_username(app.current_request)
-    # TODO serve answers as well
-    return get_questions_db().get_item(uid, username=username)
+    question = get_questions_db().get_item(uid, username=username)
+    if question is None:
+        raise NotFoundError()
+    answers = get_answers_db().list_items(question_id=uid)
+    question['answers'] = answers
+    return question
 
 
 @app.route('/questions/{uid}', methods=['POST'], authorizer=jwt_auth)
 def update_question(uid):
     body = app.current_request.json_body
     username = get_authorized_username(app.current_request)
-    # TODO check if question exists
     get_questions_db().update_item(
         uid,
         question=body.get('question'),
@@ -129,7 +141,9 @@ def update_question(uid):
 @app.route('/answers/{question_id}', methods=['POST'])
 def create_answer(question_id):
     body = app.current_request.json_body
-    # TODO check if question exists
+    question_exists = get_questions_db().item_exists(question_id)
+    if not question_exists:
+        raise NotFoundError()
     get_answers_db().add_item(
         question_id=question_id,
         answer=body['answer'],
