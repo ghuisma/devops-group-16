@@ -2,6 +2,7 @@ import os
 import boto3
 
 from uuid import uuid4
+from chalice.app import NotFoundError
 
 from boto3.dynamodb.conditions import Key
 

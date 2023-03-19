@@ -104,7 +104,7 @@ def list_questions():
 def create_question():
     body = app.current_request.json_body
     username = get_authorized_username(app.current_request)
-    if "question" not in body:
+    if not body or "question" not in body:
         raise BadRequestError("Missing question body")
     return get_questions_db().add_item(
         username=username,
@@ -130,6 +130,15 @@ def update_question(uid):
     get_questions_db().update_item(
         uid,
         question=body.get('question'),
+        username=username
+    )
+
+
+@app.route('/questions/{uid}', methods=['DELETE'], authorizer=jwt_auth)
+def delete_question(uid):
+    username = get_authorized_username(app.current_request)
+    get_questions_db().delete_item(
+        uid,
         username=username
     )
 

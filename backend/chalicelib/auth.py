@@ -12,7 +12,7 @@ def get_jwt_token(username, password, record, secret):
         record['hash'],
         password.encode('utf-8'),
         record['salt'].value,
-        record['rounds']
+        int(record['rounds'])
     )
     expected = record['hashed'].value
     if hmac.compare_digest(actual, expected):
