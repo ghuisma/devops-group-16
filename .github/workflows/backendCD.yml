@@ -1,0 +1,35 @@
+name: Update the Lambda functions
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - "main"
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+        cache: 'pip' # caching pip dependencies
+    - name: Install requirements
+      run: pip install -r ./tests/requirements.txt
+    - name: Add credentials
+      run:  | 
+          mkdir ~/.aws
+          echo [default] >> ~/.aws/config
+          echo aws_access_key_id=${{ secrets.AWS_LAMBDA_ACCESS_KEY_ID }} >> ~/.aws/config
+          echo aws_secret_access_key=${{ secrets.AWS_LAMBDA_SECRET_ACCESS_KEY }} >> ~/.aws/config
+          echo region=eu-central-1 >> ~/.aws/config
+          
+    - name: Deploy
+      run: chalice deploy --stage prod
