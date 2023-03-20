@@ -1,4 +1,9 @@
-import { CreateQuestionBody, useIsMobile, useQuestions } from "@/hooks";
+import {
+    CreateQuestionBody,
+    useIsMobile,
+    useQuestions,
+    useSnackbar,
+} from "@/hooks";
 import {
     Button,
     Dialog,
@@ -17,6 +22,7 @@ export type QuestionDialogProps = {
 
 export const QuestionDialog = ({ open, onClose }: QuestionDialogProps) => {
     const { createQuestion } = useQuestions();
+    const { Snackbar, openSnackbar } = useSnackbar();
     const isMobile = useIsMobile();
     const {
         control,
@@ -33,8 +39,13 @@ export const QuestionDialog = ({ open, onClose }: QuestionDialogProps) => {
         try {
             createQuestion(body);
             handleClose();
+            openSnackbar("New question created!");
         } catch (err) {
-            // TODO: display error message
+            openSnackbar(
+                err instanceof Error
+                    ? err.message
+                    : "Failed to create new question. Please try again!"
+            );
         }
     };
 
@@ -44,44 +55,49 @@ export const QuestionDialog = ({ open, onClose }: QuestionDialogProps) => {
     };
 
     return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            fullScreen={isMobile}
-            fullWidth
-            maxWidth="md"
-        >
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <DialogTitle>New Question</DialogTitle>
-                <DialogContent>
-                    <DialogContentText sx={{ mb: (theme) => theme.spacing(2) }}>
-                        What do you want to know?
-                    </DialogContentText>
-                    <Controller
-                        name="question"
-                        control={control}
-                        rules={{ required: "Question is required" }}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                autoFocus
-                                margin="dense"
-                                label="Question"
-                                fullWidth
-                                variant="outlined"
-                                multiline
-                                minRows={4}
-                                error={Boolean(errors.question)}
-                                helperText={errors.question?.message}
-                            />
-                        )}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button type="submit">Submit</Button>
-                </DialogActions>
-            </form>
-        </Dialog>
+        <>
+            <Snackbar />
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                fullScreen={isMobile}
+                fullWidth
+                maxWidth="md"
+            >
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <DialogTitle>New Question</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText
+                            sx={{ mb: (theme) => theme.spacing(2) }}
+                        >
+                            What do you want to know?
+                        </DialogContentText>
+                        <Controller
+                            name="question"
+                            control={control}
+                            rules={{ required: "Question is required" }}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    autoFocus
+                                    margin="dense"
+                                    label="Question"
+                                    fullWidth
+                                    variant="outlined"
+                                    multiline
+                                    minRows={4}
+                                    error={Boolean(errors.question)}
+                                    helperText={errors.question?.message}
+                                />
+                            )}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button type="submit">Submit</Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+        </>
     );
 };

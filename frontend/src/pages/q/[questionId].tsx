@@ -1,15 +1,6 @@
 import { NEXT_PUBLIC_API_URL } from "@/config";
-import { useToggle } from "@/hooks";
-import {
-    Box,
-    Button,
-    Card,
-    TextField,
-    Typography,
-    Snackbar,
-    IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { useSnackbar } from "@/hooks";
+import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 
@@ -30,21 +21,31 @@ export default function QuestionPage() {
             answer: "",
         },
     });
-    const [snackbarOpen, toggleSnackbarOpen] = useToggle(false);
-
+    const { Snackbar, openSnackbar } = useSnackbar();
     const onSubmit = async (body: AnswerQuestionBody) => {
         try {
-            await fetch(`${NEXT_PUBLIC_API_URL}/answers/${questionId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(body),
-            });
-            toggleSnackbarOpen();
-            reset();
+            const response = await fetch(
+                `${NEXT_PUBLIC_API_URL}/answers/${questionId}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(body),
+                }
+            );
+            if (response.ok) {
+                openSnackbar("Response has been saved!");
+                reset();
+            } else {
+                throw new Error("Could not save response. Please try again!");
+            }
         } catch (err) {
-            // TODO: display error
+            openSnackbar(
+                err instanceof Error
+                    ? err.message
+                    : "Could not save response. Please try again!"
+            );
         }
     };
 
@@ -61,6 +62,7 @@ export default function QuestionPage() {
                 gap: (theme) => theme.spacing(2),
             }}
         >
+            <Snackbar />
             <Card
                 sx={{
                     maxWidth: "sm",
@@ -109,18 +111,6 @@ export default function QuestionPage() {
                     </Button>
                 </Box>
             </Card>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={toggleSnackbarOpen}
-                message="Response has been saved!"
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                action={
-                    <IconButton onClick={toggleSnackbarOpen}>
-                        <CloseIcon />
-                    </IconButton>
-                }
-            />
         </Box>
     );
 }

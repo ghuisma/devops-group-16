@@ -14,6 +14,7 @@ export default function Login() {
         control,
         formState: { errors },
         handleSubmit,
+        setError,
     } = useForm<UserCredentials>({
         defaultValues: {
             username: "",
@@ -29,9 +30,15 @@ export default function Login() {
 
     const onSubmit = async (data: UserCredentials) => {
         try {
-            await login(data);
+            // await login(data);
         } catch (err) {
-            // TODO: display error
+            setError("username", {});
+            setError("password", {
+                message:
+                    err instanceof Error
+                        ? err.message
+                        : "Invalid user credentials",
+            });
         }
     };
 

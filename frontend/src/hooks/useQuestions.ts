@@ -29,16 +29,23 @@ export const useQuestions = () => {
     );
 
     const createQuestion = useCallback(
-        (body: CreateQuestionBody) => {
+        async (body: CreateQuestionBody) => {
             if (!token) return;
-            return fetch(`${NEXT_PUBLIC_API_URL}/questions`, {
+            const response = await fetch(`${NEXT_PUBLIC_API_URL}/questions`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: token,
                 },
                 body: JSON.stringify(body),
-            }).then(() => mutate());
+            });
+            if (response.ok) {
+                mutate();
+            } else {
+                throw new Error(
+                    "Failed to create new question. Please try again!"
+                );
+            }
         },
         [token]
     );

@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks";
+import { useAuth, useSnackbar } from "@/hooks";
 import { UserInfo } from "@/providers";
 import styles from "@/styles/Login.module.css";
 
@@ -25,6 +25,7 @@ export default function Register() {
             last_name: "",
         },
     });
+    const { Snackbar, openSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (token) {
@@ -37,12 +38,17 @@ export default function Register() {
             await register(data);
             await login({ username: data.username, password: data.password });
         } catch (err) {
-            // TODO: display error
+            openSnackbar(
+                err instanceof Error
+                    ? err.message
+                    : "Failed to create new account"
+            );
         }
     };
 
     return (
         <main className={styles.main}>
+            <Snackbar />
             <Paper className={styles.paper}>
                 <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                     <Controller
