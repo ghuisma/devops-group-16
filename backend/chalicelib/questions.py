@@ -70,6 +70,14 @@ class DynamoQuestionDB(QuestionDB):
             return response['Item']
         except KeyError:
             raise NotFoundError()
+        
+    def get_item_by_id(self, uid):
+        fe = Key('uid').eq(uid)
+        response = self._table.scan(FilterExpression=fe)
+        items = response.get('Items', [])
+        if len(items) == 0:
+            raise NotFoundError()
+        return items[0]
 
     def delete_item(self, uid, username=DEFAULT_USERNAME):
         self._table.delete_item(

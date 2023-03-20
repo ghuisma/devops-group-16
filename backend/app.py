@@ -134,7 +134,7 @@ def update_question(uid):
     )
 
 
-@app.route('/questions/{uid}', methods=['DELETE'], authorizer=jwt_auth)
+@app.route('/questions/{uid}', methods=['DELETE'], authorizer=jwt_auth, cors=True)
 def delete_question(uid):
     username = get_authorized_username(app.current_request)
     get_questions_db().delete_item(
@@ -146,6 +146,11 @@ def delete_question(uid):
 # --------------------------------------------------------
 # Answer endpoint
 # --------------------------------------------------------
+
+@app.route('/answers/{question_id}', methods=['GET'], cors=True)
+def view_question(question_id):
+    return get_questions_db().get_item_by_id(question_id)
+
 
 @app.route('/answers/{question_id}', methods=['POST'], cors=True)
 def create_answer(question_id):
