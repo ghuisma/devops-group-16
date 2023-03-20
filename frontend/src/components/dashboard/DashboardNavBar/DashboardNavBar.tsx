@@ -39,7 +39,7 @@ export const DashboardNavBar = ({
                 <List>
                     {questions?.map((questionObj) => (
                         <ListItem
-                            key={questionObj.question}
+                            key={questionObj.uid}
                             disablePadding
                             onClick={() => onQuestionClick(questionObj)}
                         >

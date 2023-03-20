@@ -30,7 +30,7 @@ export default function Login() {
 
     const onSubmit = async (data: UserCredentials) => {
         try {
-            // await login(data);
+            await login(data);
         } catch (err) {
             setError("username", {});
             setError("password", {
