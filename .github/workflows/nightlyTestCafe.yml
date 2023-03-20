@@ -3,12 +3,6 @@ name: Nightly Test
 on:
   schedule:
     - cron: '0 0 * * *' # Run nightly at midnight
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
 defaults:
   run:
