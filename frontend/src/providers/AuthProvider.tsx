@@ -14,12 +14,14 @@ export type UserCredentials = Pick<UserInfo, "username" | "password">;
 
 type AuthContextValue = {
     token?: string;
+    isLoading: boolean;
     register: (userInfo: UserInfo) => Promise<void>;
     login: (credentials: UserCredentials) => Promise<void>;
     logout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextValue>({
+    isLoading: true,
     register: async () => {},
     login: async () => {},
     logout: async () => {},
@@ -30,11 +32,13 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [token, setToken] = useState<string>();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         setToken(token ?? undefined);
+        setIsLoading(false);
     }, []);
 
     const register = async (userInfo: UserInfo) => {
@@ -78,7 +82,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     return (
-        <AuthContext.Provider value={{ token, register, login, logout }}>
+        <AuthContext.Provider
+            value={{ token, isLoading, register, login, logout }}
+        >
             {children}
         </AuthContext.Provider>
     );

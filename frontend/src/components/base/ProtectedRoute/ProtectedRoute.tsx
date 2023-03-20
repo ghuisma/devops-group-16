@@ -8,13 +8,13 @@ type ProtectedRouteProps = {
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     const router = useRouter();
-    const { token } = useAuth();
+    const { token, isLoading } = useAuth();
 
     useEffect(() => {
-        if (!token) {
+        if (!isLoading && !token) {
             router.push("/login");
         }
-    }, [token]);
+    }, [token, isLoading]);
 
     if (!token) {
         return null;
