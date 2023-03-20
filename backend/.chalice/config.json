@@ -4,7 +4,31 @@
   "stages": {
     "dev": {
       "autogen_policy": false,
-      "api_gateway_stage": "api"
+      "api_gateway_stage": "dev",
+      "api_gateway_custom_domain": {
+        "domain_name": "test-api.onequestionsurvey.nl",
+        "certificate_arn": "arn:aws:acm:us-east-1:461124506129:certificate/2041d80a-8116-4a77-933e-4d4e85ce08ef",
+        "url_prefix": "v1"
+      },
+      "environment_variables": {
+        "QUESTIONS_TABLE_NAME": "questions-app-4d5b5147-8f51-4118-829a-c9314a9fbc72",
+        "ANSWERS_TABLE_NAME": "answers-app-f371fd1b-1bdb-4aae-ab04-41a82ac85bc4",
+        "USERS_TABLE_NAME": "users-app-bb0b7606-7022-400c-8d07-2f4922f10354"
+      }
+    },
+    "prod": {
+      "autogen_policy": false,
+      "api_gateway_stage": "prod",
+      "api_gateway_custom_domain": {
+        "domain_name": "api.onequestionsurvey.nl",
+        "certificate_arn": "arn:aws:acm:us-east-1:461124506129:certificate/2041d80a-8116-4a77-933e-4d4e85ce08ef",
+        "url_prefix": "v1"
+      },
+      "environment_variables": {
+        "QUESTIONS_TABLE_NAME": "questions-app-f87e7278-e821-41c0-beee-08e2abc2690e",
+        "ANSWERS_TABLE_NAME": "answers-app-644d0527-ad18-47aa-bc28-225e19db5b48",
+        "USERS_TABLE_NAME": "users-app-d787993b-bc47-4ccb-9ecf-034e57e754b4"
+      }
     }
   }
 }

@@ -1,8 +1,5 @@
 name: Test backend
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -23,5 +20,12 @@ jobs:
         cache: 'pip' # caching pip dependencies
     - name: Install requirements
       run: pip install -r ./tests/requirements.txt
+    - name: Add credentials
+      run:  | 
+          mkdir ~/.aws
+          echo [default] >> ~/.aws/config
+          echo aws_access_key_id=${{ secrets.AWS_LAMBDA_ACCESS_KEY_ID }} >> ~/.aws/config
+          echo aws_secret_access_key=${{ secrets.AWS_LAMBDA_SECRET_ACCESS_KEY }} >> ~/.aws/config
+          echo region=eu-central-1 >> ~/.aws/config
     - name: Run tests
       run: py.test ./tests/test_app.py
