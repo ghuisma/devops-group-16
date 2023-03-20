@@ -4,7 +4,6 @@ import { within, userEvent } from "@storybook/testing-library";
 // import { expect } from '@storybook/jest';
 import { AppBase } from "@/pages/_app";
 import LoginPage from "@/pages/login";
-import { NEXT_PUBLIC_API_URL } from "@/config";
 
 const token = "VerysecureJWTToken";
 
@@ -27,7 +26,7 @@ export const Success = Template.bind({});
 Success.parameters = {
     mockData: [
         {
-            url: `${NEXT_PUBLIC_API_URL}/auth/login`,
+            url: `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             method: "POST",
             status: 200,
             response: { token },
@@ -66,7 +65,7 @@ export const IncorrectCredentials = Template.bind({});
 IncorrectCredentials.parameters = {
     mockData: [
         {
-            url: `${NEXT_PUBLIC_API_URL}/auth/login`,
+            url: `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             method: "POST",
             status: 403,
             response: { message: "Incorrect user credentials" },

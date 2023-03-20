@@ -20,7 +20,6 @@ import {
     TableCell,
 } from "@mui/material";
 import { useState } from "react";
-import { NEXT_PUBLIC_APP_URL } from "@/config";
 import { useAnswers } from "@/hooks";
 
 const toCSV = (arr: string[][]) => {
@@ -64,7 +63,7 @@ export default function Dashboard() {
                             <CardActionArea
                                 onClick={() =>
                                     handleCopy(
-                                        `${NEXT_PUBLIC_APP_URL}/q/${activeQuestion.uid}`
+                                        `${process.env.NEXT_PUBLIC_APP_URL}/q/${activeQuestion.uid}`
                                     )
                                 }
                             >
@@ -84,7 +83,7 @@ export default function Dashboard() {
                                         }}
                                     >
                                         <Typography>
-                                            {NEXT_PUBLIC_APP_URL}/q/
+                                            {process.env.NEXT_PUBLIC_APP_URL}/q/
                                             {activeQuestion.uid}
                                         </Typography>
                                         <IconButton
@@ -93,7 +92,7 @@ export default function Dashboard() {
                                             onClick={(event) => {
                                                 event.stopPropagation();
                                                 handleCopy(
-                                                    `${NEXT_PUBLIC_APP_URL}/q/${activeQuestion.uid}`
+                                                    `${process.env.NEXT_PUBLIC_APP_URL}/q/${activeQuestion.uid}`
                                                 );
                                             }}
                                         >

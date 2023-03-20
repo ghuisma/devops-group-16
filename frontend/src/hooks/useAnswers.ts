@@ -1,4 +1,3 @@
-import { NEXT_PUBLIC_API_URL } from "@/config";
 import useSwr from "swr";
 import { useAuth } from "./useAuth";
 import { Question } from "./useQuestions";
@@ -15,7 +14,10 @@ export const useAnswers = (questionId?: string) => {
     const { token } = useAuth();
     const { data, error, isLoading } = useSwr<Question & { answers: Answers }>(
         token && questionId
-            ? [`${NEXT_PUBLIC_API_URL}/questions/${questionId}`, token]
+            ? [
+                  `${process.env.NEXT_PUBLIC_API_URL}/questions/${questionId}`,
+                  token,
+              ]
             : null,
         ([key, token]: [string, string]) =>
             fetch(key, {

@@ -1,4 +1,3 @@
-import { NEXT_PUBLIC_API_URL } from "@/config";
 import { useSnackbar } from "@/hooks";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -25,7 +24,7 @@ export default function QuestionPage() {
     const onSubmit = async (body: AnswerQuestionBody) => {
         try {
             const response = await fetch(
-                `${NEXT_PUBLIC_API_URL}/answers/${questionId}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/answers/${questionId}`,
                 {
                     method: "POST",
                     headers: {

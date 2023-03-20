@@ -1,4 +1,3 @@
-import { NEXT_PUBLIC_API_URL } from "@/config";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 export type UserInfo = {
@@ -42,13 +41,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }, []);
 
     const register = async (userInfo: UserInfo) => {
-        const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userInfo),
-        });
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userInfo),
+            }
+        );
         if (response.ok) {
             await login({
                 username: userInfo.username,
@@ -60,13 +62,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     const login = async (userCredentials: UserCredentials) => {
-        const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userCredentials),
-        });
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userCredentials),
+            }
+        );
         if (response.ok) {
             const { token } = await response.json();
             localStorage.setItem("token", token);
