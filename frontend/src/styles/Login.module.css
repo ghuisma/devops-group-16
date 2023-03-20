@@ -1,0 +1,37 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--mui-palette-primary-main);
+}
+
+.paper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mb {
+    margin-bottom: 1rem !important;
+}
+
+.registerText {
+    text-align: end;
+}
+
+.link {
+    color: var(--mui-palette-primary-main);
+    font-weight: bold;
+    text-decoration: none;
+}

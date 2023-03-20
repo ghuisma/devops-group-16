@@ -61,7 +61,7 @@ def jwt_auth(auth_request):
 # Auth endpoints
 # --------------------------------------------------------
 
-@app.route('/auth/login', methods=['POST'])
+@app.route('/auth/login', methods=['POST'], cors=True)
 def login():
     body = app.current_request.json_body
     record = get_users_db().get_user(body.get('username'))
@@ -71,7 +71,7 @@ def login():
     return {'token': jwt_token}
 
 
-@app.route('/auth/register', methods=['POST'])
+@app.route('/auth/register', methods=['POST'], cors=True)
 def register():
     body = app.current_request.json_body
     pwd1 = body.get('password')
@@ -94,13 +94,13 @@ def register():
 # Question endpoints
 # --------------------------------------------------------
 
-@app.route('/questions', methods=['GET'], authorizer=jwt_auth)
+@app.route('/questions', methods=['GET'], authorizer=jwt_auth, cors=True)
 def list_questions():
     username = get_authorized_username(app.current_request)
     return get_questions_db().list_items(username=username)
 
 
-@app.route('/questions', methods=['POST'], authorizer=jwt_auth)
+@app.route('/questions', methods=['POST'], authorizer=jwt_auth, cors=True)
 def create_question():
     body = app.current_request.json_body
     username = get_authorized_username(app.current_request)
@@ -112,7 +112,7 @@ def create_question():
     )
 
 
-@app.route('/questions/{uid}', methods=['GET'], authorizer=jwt_auth)
+@app.route('/questions/{uid}', methods=['GET'], authorizer=jwt_auth, cors=True)
 def get_question(uid):
     username = get_authorized_username(app.current_request)
     question = get_questions_db().get_item(uid, username=username)
@@ -123,7 +123,7 @@ def get_question(uid):
     return question
 
 
-@app.route('/questions/{uid}', methods=['POST'], authorizer=jwt_auth)
+@app.route('/questions/{uid}', methods=['POST'], authorizer=jwt_auth, cors=True)
 def update_question(uid):
     body = app.current_request.json_body
     username = get_authorized_username(app.current_request)
@@ -147,7 +147,7 @@ def delete_question(uid):
 # Answer endpoint
 # --------------------------------------------------------
 
-@app.route('/answers/{question_id}', methods=['POST'])
+@app.route('/answers/{question_id}', methods=['POST'], cors=True)
 def create_answer(question_id):
     body = app.current_request.json_body
     question_exists = get_questions_db().item_exists(question_id)
