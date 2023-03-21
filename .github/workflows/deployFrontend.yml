@@ -35,8 +35,3 @@ jobs:
 
     - name: Deploy static site to S3 bucket
       run: aws s3 sync /home/runner/work/devops-group-16/devops-group-16/frontend/out s3://frontend-development-bucket --delete
-
-    - name: Invalidate CloudFront cache
-      run: aws cloudfront create-invalidation \
-          --distribution-id E1V03KSHHPDR0V \
-          --paths "/*"
