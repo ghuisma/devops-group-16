@@ -1,4 +1,4 @@
-import { useSnackbar } from "@/hooks";
+import { getQuestionText, useSnackbar } from "@/hooks";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
@@ -10,6 +10,8 @@ export type AnswerQuestionBody = {
 export default function QuestionPage() {
     const router = useRouter();
     const { questionId } = router.query;
+    const questionText = getQuestionText(questionId);
+
     const {
         control,
         formState: { errors },
@@ -70,7 +72,7 @@ export default function QuestionPage() {
                 }}
             >
                 <Typography variant="h6" component="h1">
-                    {questionId}
+                    { questionText ?? "Loading..." }
                 </Typography>
             </Card>
             <Card
@@ -113,3 +115,4 @@ export default function QuestionPage() {
         </Box>
     );
 }
+
