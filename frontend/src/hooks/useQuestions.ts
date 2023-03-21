@@ -14,6 +14,15 @@ export type CreateQuestionBody = {
     question: string;
 };
 
+export  const getQuestionText = async (questionId: string | string[] | undefined, setQuestionText: Function) => {
+    var response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/answers/${questionId}`, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((res) => res.json())
+    setQuestionText(response?.question)
+}
+
 export const useQuestions = () => {
     const { token } = useAuth();
     const { data, error, isLoading, mutate } = useSwr<Questions>(
@@ -59,16 +68,3 @@ export const useQuestions = () => {
         createQuestion,
     };
 };
-
-export const getQuestionText = (questionId: string | string[] | undefined) => {
-    const { data, error, isLoading } = useSwr<Question>(
-        [`${process.env.NEXT_PUBLIC_API_URL}/answers/${questionId}`],
-        ([key]: [string]) =>
-            fetch(key, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => res.json())
-    );
-    return data?.question
-}

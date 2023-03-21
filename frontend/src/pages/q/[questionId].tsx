@@ -1,6 +1,7 @@
 import { getQuestionText, useSnackbar } from "@/hooks";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import { useContext, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export type AnswerQuestionBody = {
@@ -10,7 +11,9 @@ export type AnswerQuestionBody = {
 export default function QuestionPage() {
     const router = useRouter();
     const { questionId } = router.query;
-    const questionText = getQuestionText(questionId);
+    const [questionText, setQuestionText] = useState("Loading...")
+    getQuestionText(questionId, setQuestionText);
+
 
     const {
         control,
