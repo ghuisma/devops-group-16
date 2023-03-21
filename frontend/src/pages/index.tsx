@@ -6,6 +6,7 @@ import {
 } from "@/components";
 import CopyIcon from "@mui/icons-material/CopyAll";
 import DownloadIcon from "@mui/icons-material/Download";
+import QrCode2Icon from '@mui/icons-material/QrCode2';
 import { Question, useToggle } from "@/hooks";
 import {
     Box,
@@ -21,6 +22,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useAnswers } from "@/hooks";
+import { QrDialog } from "@/components/dashboard/QrDialog";
 
 const toCSV = (arr: string[][]) => {
     if (!arr.length) return "";
@@ -35,6 +37,7 @@ export default function Dashboard() {
     const [activeQuestion, setActiveQuestion] = useState<Question>();
     const { answers } = useAnswers(activeQuestion?.uid);
     const [createDialogOpen, toggleCreateDialogOpen] = useToggle(false);
+    const [qrOpen, toggleQrOpen] = useToggle(false);
 
     const handleCopy = (text: string) => {
         navigator.clipboard.writeText(text);
@@ -50,6 +53,13 @@ export default function Dashboard() {
                     open={createDialogOpen}
                     onClose={toggleCreateDialogOpen}
                 />
+                
+                <QrDialog
+                    open={qrOpen}
+                    onClose={toggleQrOpen}
+                    link={`${process.env.NEXT_PUBLIC_APP_URL}/q/${activeQuestion?.uid}`}
+                />
+                    
                 <DashboardFab onClick={toggleCreateDialogOpen} />
                 {activeQuestion && (
                     <Box
@@ -97,6 +107,16 @@ export default function Dashboard() {
                                             }}
                                         >
                                             <CopyIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            component="div"
+                                            size="large"
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                toggleQrOpen();
+                                            }}
+                                        >
+                                            <QrCode2Icon />
                                         </IconButton>
                                     </Box>
                                 </Box>
