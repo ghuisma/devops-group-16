@@ -124,7 +124,7 @@ export default function Register() {
                             required: "Password is required",
                             pattern: {
                                 value: /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
-                                message: "Use at least 8 characters",
+                                message: "Use at least 8 characters, 1 special character, 1 uppercase letter, 1 lowercase letter and 1 number",
                             },
                         }}
                         render={({ field }) => (

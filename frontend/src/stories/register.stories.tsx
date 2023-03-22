@@ -40,7 +40,7 @@ RendersWithoutError.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(emailInput, "testuser", {
+  await userEvent.type(emailInput, "testuser@mail.nl", {
     delay: 100,
   });
 
@@ -56,7 +56,7 @@ RendersWithoutError.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(passwordInput, "ExamplePassword", {
+  await userEvent.type(passwordInput, "ExamplePassword123!", {
     delay: 100,
   });
 
@@ -64,13 +64,22 @@ RendersWithoutError.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(repeatPasswordInput, "ExamplePassword", {
+  await userEvent.type(repeatPasswordInput, "ExamplePassword123!", {
     delay: 100,
   });
 
   const submitButton = canvas.getByRole("button");
 
   userEvent.click(submitButton);
+
+  await waitFor(
+    () => {
+      expect(canvas.queryByText("Please enter a valid email")).toBeNull();
+      expect(canvas.queryByText("Use at least 8 characters, 1 special character, 1 uppercase letter, 1 lowercase letter and 1 number")).toBeNull();
+      expect(canvas.queryByText("Please repeat the password")).toBeNull();
+    },
+    { timeout: 200 }
+  );
 };
 
 export const ErrorMessageWhenInvalidMail = Template.bind({});
@@ -114,7 +123,7 @@ ErrorMessageWhenInvalidMail.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(passwordInput, "ExamplePassword", {
+  await userEvent.type(passwordInput, "ExamplePassword123!", {
     delay: 100,
   });
 
@@ -122,7 +131,7 @@ ErrorMessageWhenInvalidMail.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(repeatPasswordInput, "ExamplePassword", {
+  await userEvent.type(repeatPasswordInput, "ExamplePassword123!", {
     delay: 100,
   });
 
@@ -163,7 +172,7 @@ ErrorMessageWhenPasswordMismatch.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(emailInput, "testuser", {
+  await userEvent.type(emailInput, "testuser@mail.nl", {
     delay: 100,
   });
 
@@ -179,7 +188,7 @@ ErrorMessageWhenPasswordMismatch.play = async ({ canvasElement }) => {
     selector: "input",
   });
 
-  await userEvent.type(passwordInput, "ExamplePassword", {
+  await userEvent.type(passwordInput, "ExamplePassword123!", {
     delay: 100,
   });
 
@@ -198,6 +207,71 @@ ErrorMessageWhenPasswordMismatch.play = async ({ canvasElement }) => {
   await waitFor(
     () => {
       expect(canvas.getByText("Please repeat the password")).toBeInTheDocument();
+    },
+    { timeout: 200 }
+  ); // adjust the timeout value as needed
+};
+
+export const ErrorMessageWhenPasswordInvalid = Template.bind({});
+
+ErrorMessageWhenPasswordInvalid.play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
+
+  const firstNameInput = canvas.getByLabelText("First name", {
+    selector: "input",
+  });
+
+  await userEvent.type(firstNameInput, "testuser", {
+    delay: 100,
+  });
+
+  const lastNameInput = canvas.getByLabelText("Last name", {
+    selector: "input",
+  });
+
+  await userEvent.type(lastNameInput, "My Last Name", {
+    delay: 100,
+  });
+
+  const emailInput = canvas.getByLabelText("Email", {
+    selector: "input",
+  });
+
+  await userEvent.type(emailInput, "testuser@mail.nl", {
+    delay: 100,
+  });
+
+  const usernameInput = canvas.getByLabelText("Username", {
+    selector: "input",
+  });
+
+  await userEvent.type(usernameInput, "testuser", {
+    delay: 100,
+  });
+
+  const passwordInput = canvas.getByLabelText("Password", {
+    selector: "input",
+  });
+
+  await userEvent.type(passwordInput, "ExamplePassword123", {
+    delay: 100,
+  });
+
+  const repeatPasswordInput = canvas.getByLabelText("Repeat password", {
+    selector: "input",
+  });
+
+  await userEvent.type(repeatPasswordInput, "ExamplePassword123", {
+    delay: 100,
+  });
+
+  const submitButton = canvas.getByRole("button");
+
+  userEvent.click(submitButton);
+
+  await waitFor(
+    () => {
+      expect(canvas.getByText("Use at least 8 characters, 1 special character, 1 uppercase letter, 1 lowercase letter and 1 number")).toBeInTheDocument();
     },
     { timeout: 200 }
   ); // adjust the timeout value as needed
