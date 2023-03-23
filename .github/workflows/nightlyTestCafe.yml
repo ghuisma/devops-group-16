@@ -19,4 +19,8 @@ jobs:
       run: npm install
       
     - name: Run testcafe tests
+      env:
+        TEST_QUESTION_LINK: ${{ secrets.E2E_QUESTION_URL}}
+        TEST_QUESTION_USERNAME: ${{secrets.E2E_USERNAME}}
+        TEST_QUESTION_PASS: ${{ secrets.E2E_PASSWORD}}
       run: npm run test
