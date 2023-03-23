@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { within, userEvent } from "@storybook/testing-library";
-// import { expect } from '@storybook/jest';
+import { within, userEvent, waitFor } from "@storybook/testing-library";
+import { expect } from '@storybook/jest';
 import { AppBase } from "@/pages/_app";
 import LoginPage from "@/pages/login";
 
@@ -57,7 +57,12 @@ Success.play = async ({ canvasElement }) => {
 
     await userEvent.click(submitButton);
 
-    // TODO: expect Next.js router push to "/"
+    await waitFor(
+        () => {
+            expect(canvas.queryByText("Invalid user credentials")).toBeNull();
+        },
+        { timeout: 200 }
+    );
 };
 
 export const IncorrectCredentials = Template.bind({});
@@ -73,4 +78,33 @@ IncorrectCredentials.parameters = {
     ],
 };
 
-// TODO: input validation failing plays + incorrect credentials play
+IncorrectCredentials.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const usernameInput = canvas.getByLabelText("Username", {
+        selector: "input",
+    });
+
+    await userEvent.type(usernameInput, "testuser", {
+        delay: 100,
+    });
+
+    const passwordInput = canvas.getByLabelText("Password", {
+        selector: "input",
+    });
+
+    await userEvent.type(passwordInput, "ExamplePassword", {
+        delay: 100,
+    });
+    // See https://storybook.js.org/docs/react/essentials/actions#automatically-matching-args to learn how to setup logging in the Actions panel
+    const submitButton = canvas.getByRole("button");
+
+    await userEvent.click(submitButton);
+
+    await waitFor(
+        () => {
+            expect(canvas.getByText("Invalid user credentials")).toBeInTheDocument();
+        },
+        { timeout: 200 }
+    );
+};
