@@ -3,9 +3,6 @@ name: Nightly Test
 on:
   schedule:
     - cron: '0 0 * * *' # Run nightly at midnight
-  pull_request:
-    branches:
-      - main
 
 defaults:
   run:
