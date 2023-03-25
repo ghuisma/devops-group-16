@@ -28,9 +28,9 @@ test("Answer question", async (t) => {
 
   await t
     .expect(Selector("body").textContent)
-    .contains("Is this a test?")
+    .contains("Is this a test?", { timeout: 30000 })
     .typeText(answerField, "Yes")
     .click(Selector("button").withText("SUBMIT"))
-    .expect(Selector("body").textContent)
+    .expect(Selector("body").textContent, { timeout: 30000 })
     .contains("Response has been saved!");
 });
